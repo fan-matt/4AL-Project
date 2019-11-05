@@ -19,7 +19,7 @@ class App extends React.Component {
     }
 
     componentWillUnmount() {
-        window.removeEventListener('resize');
+        window.removeEventListener('resize' , this.resize);
     }
     // End React Lifecycle Methods //
 
