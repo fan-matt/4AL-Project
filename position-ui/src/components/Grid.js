@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
 import { Stage , Layer , Line } from 'react-konva';
 
@@ -8,10 +9,36 @@ export default class Grid extends React.Component {
         super(props);
 
         this.state = {
-            scale: 1 ,
+            scale: 1.3 ,
         }
     }
 
+    // React Lifecycle Methods //
+    componentDidMount() {
+        let thisElement = ReactDOM.findDOMNode(this);
+        thisElement.addEventListener('wheel' , this.scrollScale);
+    }
+
+    componentWillUnmount() {
+        let thisElement = ReactDOM.findDOMNode(this);
+        thisElement.removeEventListener('wheel' , this.scrollScale);
+    }
+    // End React Lifecycle Methods //
+
+    scrollScale = (event) => {
+        event.preventDefault();
+
+        let newScale = this.state.scale + event.deltaY * .1;
+
+        if(newScale <= .1) {
+            return;
+        }
+
+        this.setState({
+            scale: newScale
+        });
+    }
+    
     createIntArray = (start , stop) => {
         let array = new Array(stop - start + 1);
 
@@ -24,11 +51,13 @@ export default class Grid extends React.Component {
 
     renderGrid = () => {
         const BUFFER = 10;
-        const NUM_GRIDLINES = 10 * this.state.scale;
+        const NUM_GRIDLINES = Math.round(10 * this.state.scale);
         const HEIGHT = this.props.height - BUFFER * 2;
         const WIDTH = this.props.width - BUFFER * 2;
         const stepSize = Math.max(HEIGHT , WIDTH) / (2 * NUM_GRIDLINES);
 
+        console.log("gridlines: " + NUM_GRIDLINES);
+        
         let xLines = this.createIntArray(-NUM_GRIDLINES , NUM_GRIDLINES).map(num => {
             let yCoordinate = stepSize * num + this.props.height / 2;
             return <Line points={[0 , yCoordinate , this.props.width , yCoordinate]} stroke='grey' />
