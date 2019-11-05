@@ -24,17 +24,18 @@ export default class Grid extends React.Component {
 
     renderGrid = () => {
         const BUFFER = 10;
-        const NUM_GRIDLINES = 10;
+        const NUM_GRIDLINES = 10 * this.state.scale;
         const HEIGHT = this.props.height - BUFFER * 2;
         const WIDTH = this.props.width - BUFFER * 2;
+        const stepSize = Math.max(HEIGHT , WIDTH) / (2 * NUM_GRIDLINES);
 
         let xLines = this.createIntArray(-NUM_GRIDLINES , NUM_GRIDLINES).map(num => {
-            let yCoordinate = HEIGHT / (2 * NUM_GRIDLINES) * num + this.props.height / 2;
+            let yCoordinate = stepSize * num + this.props.height / 2;
             return <Line points={[0 , yCoordinate , this.props.width , yCoordinate]} stroke='grey' />
         });
 
         let yLines = this.createIntArray(-NUM_GRIDLINES , NUM_GRIDLINES).map(num => {
-            let xCoordinate = WIDTH / (2 * NUM_GRIDLINES) * num + this.props.width / 2;
+            let xCoordinate = stepSize * num + this.props.width / 2;
             return <Line points={[xCoordinate , 0 , xCoordinate , this.props.height]} stroke='grey' />
         });
 
