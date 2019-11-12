@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/fan-matt/4AL-Project/issues"
   },
-  "homepage": "https://github.com/fan-matt/4AL-Project#readme"
+  "homepage": "https://github.com/fan-matt/4AL-Project#readme",
+  "dependencies": {
+    "serialport": "^8.0.5"
+  }
 }
