@@ -1,0 +1,19 @@
+{
+  "name": "position-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fan-matt/4AL-Project.git"
+  },
+  "author": "Matthew Fan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fan-matt/4AL-Project/issues"
+  },
+  "homepage": "https://github.com/fan-matt/4AL-Project#readme"
+}
