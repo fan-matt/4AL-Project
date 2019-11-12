@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Arduino from './Arduino';
+
 import { Stage , Layer , Line } from 'react-konva';
 
 
@@ -9,7 +11,11 @@ export default class Grid extends React.Component {
         super(props);
 
         this.state = {
-            scale: 1.3 ,
+            buffer: 10 ,
+            scale: 1 ,
+            defaultLines: 10 ,
+            xPos: 0 ,
+            yPos: 0 ,
         }
     }
 
@@ -28,9 +34,10 @@ export default class Grid extends React.Component {
     scrollScale = (event) => {
         event.preventDefault();
 
-        let newScale = this.state.scale + event.deltaY * .1;
+        let sign = (event.deltaY < 0) ? -1 : 1;
+        let newScale = Math.round(this.state.scale + sign);
 
-        if(newScale <= .1) {
+        if(newScale < 1) {
             return;
         }
 
@@ -50,13 +57,10 @@ export default class Grid extends React.Component {
     }
 
     renderGrid = () => {
-        const BUFFER = 10;
-        const NUM_GRIDLINES = Math.round(10 * this.state.scale);
-        const HEIGHT = this.props.height - BUFFER * 2;
-        const WIDTH = this.props.width - BUFFER * 2;
+        const NUM_GRIDLINES = this.state.scale * this.state.defaultLines;
+        const HEIGHT = this.props.height - this.state.buffer * 2;
+        const WIDTH = this.props.width - this.state.buffer * 2;
         const stepSize = Math.max(HEIGHT , WIDTH) / (2 * NUM_GRIDLINES);
-
-        console.log("gridlines: " + NUM_GRIDLINES);
         
         let xLines = this.createIntArray(-NUM_GRIDLINES , NUM_GRIDLINES).map(num => {
             let yCoordinate = stepSize * num + this.props.height / 2;
@@ -67,6 +71,11 @@ export default class Grid extends React.Component {
             let xCoordinate = stepSize * num + this.props.width / 2;
             return <Line points={[xCoordinate , 0 , xCoordinate , this.props.height]} stroke='grey' />
         });
+
+
+        let arduinoX = this.state.xPos * stepSize + this.props.width / 2;
+        let arduinoY = -this.state.yPos * stepSize + this.props.height / 2;
+
 
         return(
             <>
@@ -80,10 +89,13 @@ export default class Grid extends React.Component {
 
                 <Line points={[0 , this.props.height / 2 , this.props.width , this.props.height / 2]}
                     stroke='black' strokeWidth={5} />
+
+                {/* Draw Arduino at correct position */}
+                <Arduino xPos={arduinoX} yPos={arduinoY} scale={1.0 / this.state.scale} />
             </>
         );   
     }
-  
+
     render() {
         return(
             <Stage width={this.props.width} height={this.props.height}>
