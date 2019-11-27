@@ -5,6 +5,8 @@ import Arduino from './Arduino';
 
 import { Stage , Layer , Line } from 'react-konva';
 
+import io from 'socket.io-client';
+
 
 export default class Grid extends React.Component {
     constructor(props) {
@@ -17,6 +19,11 @@ export default class Grid extends React.Component {
             xPos: 0 ,
             yPos: 0 ,
         }
+
+        this.socket = io(`http://localhost:8000`);
+        this.socket.on('' , data => {
+            console.log(data);
+        });
     }
 
     // React Lifecycle Methods //
