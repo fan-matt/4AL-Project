@@ -1,31 +1,38 @@
+from flask import Flask
+import flask
 import serial
 import socket
 
-HOST        = 'localhost'
 PORT        = 8000
 
 SERIAL      = "/dev/ttyACM0"
 BAUD        = 115200
 
-with socket.socket(socket.AF_INET , socket.SOCK_STREAM) as s:
-    s.bind((HOST , PORT))
-    s.listen()
-    conn , addr = s.accept()
-    with conn:
-        print('Connected by' , addr)
-        i = 0
-        while True:
-            conn.sendall(bytes(i))
 
-
-
-
+app = Flask(__name__)
 ser = serial.Serial(SERIAL)
 ser.baudrate = BAUD
 
-while 1:
-    serialLine = ser.readline()
 
-    print(serialLine)
+@app.route("/stream")
+def stream():
+    def getSerialData():
+        i = 0
+        j = 0
+        while True:
+            if i < 10000000:    # Really bad timer but actually works pretty well
+                i += 1
+            else:
+                i = 0
+                data = 'data: ' + str(j) + '\n\n'
+                yield data
+                j += 1
+    
+    response = flask.Response(getSerialData() , mimetype="text/event-stream")
+    response.headers.add("Access-Control-Allow-Origin" , "*")
+    return response
 
-ser.close()
+
+
+if __name__ == "__main__":
+    app.run(port = PORT)
