@@ -20,7 +20,15 @@ export default class Grid extends React.Component {
 
         this.posSource = new EventSource("http://localhost:8000/stream");
         this.posSource.onmessage = (msg) => {
-            console.log(msg.data);
+            let data = msg.data.slice(2);
+            data = data.slice(0 , -5);
+
+            let splitData = data.split(',');
+            
+            this.setState({
+                xPos: parseFloat(splitData[0]) ,
+                yPos: parseFloat(splitData[1])
+            });
         };
     }
 
