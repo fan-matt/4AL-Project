@@ -63,6 +63,8 @@ void loop()
   xPos += xAccel * loopDuration * loopDuration;
   yPos += yAccel * loopDuration * loopDuration;
 
+  xPos *= -1;   // Just to get the sign right
+
   data[0] = xAccel;
   data[1] = yAccel;
 
