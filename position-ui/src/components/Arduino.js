@@ -9,7 +9,7 @@ export default class Arduino extends React.Component {
                 <Circle 
                     x={this.props.xPos} 
                     y={this.props.yPos}
-                    radius={20 * this.props.scale}
+                    radius={20 * this.props.scale * 3}
                     fill="red"
                 />
             </>
