@@ -1,7 +1,7 @@
 from flask import Flask
 import flask
 import serial
-import socket
+
 
 PORT        = 8000
 
@@ -17,8 +17,6 @@ ser.baudrate = BAUD
 @app.route("/stream")
 def stream():
     def getSerialData():
-        i = 0
-        j = 0
         while True:
             serialLine = str(ser.readline())
 
